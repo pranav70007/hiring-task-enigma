@@ -54,12 +54,9 @@ def pinecone_query(query_text: str, top_k=TOP_K):
         include_metadata=True,
         include_values=False
     )
-    print("DEBUG: Pinecone top 5 results:")
-    print(len(res["matches"]))
     return res["matches"]
 
 def fetch_graph_context(node_ids: List[str], neighborhood_depth=1):
-    """Fetch neighboring nodes from Neo4j."""
     facts = []
     with driver.session() as session:
         for nid in node_ids:
@@ -76,7 +73,7 @@ def fetch_graph_context(node_ids: List[str], neighborhood_depth=1):
                     "rel": r["rel"],
                     "target_id": r["id"],
                     "target_name": r["name"],
-                    "target_desc": (r["description"] or "")[:400],
+                    "target_desc": (r["description"] or ""),
                     "labels": r["labels"]
                 })
     print("DEBUG: Graph facts:")
@@ -84,7 +81,6 @@ def fetch_graph_context(node_ids: List[str], neighborhood_depth=1):
     return facts
 
 def build_prompt(user_query, pinecone_matches, graph_facts):
-    """Build a chat prompt combining vector DB matches and graph facts."""
     system = (
         "You are a helpful travel assistant. Use the provided semantic search results "
         "and graph facts to answer the user's query briefly and concisely. "
@@ -128,7 +124,6 @@ def call_chat(prompt_messages):
 # Interactive chat
 # -----------------------------
 def interactive_chat():
-    print("Hybrid travel assistant. Type 'exit' to quit.")
     while True:
         query = input("\nEnter your travel question: ").strip()
         if not query or query.lower() in ("exit","quit"):
