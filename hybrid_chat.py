@@ -11,8 +11,7 @@ load_dotenv()
 # Config
 # -----------------------------
 EMBED_MODEL = "text-embedding-3-small"
-CHAT_MODEL = "gpt-4o-mini"
-TOP_K = 5
+TOP_K = 10
 
 INDEX_NAME = config.PINECONE_INDEX_NAME
 
@@ -34,7 +33,6 @@ if INDEX_NAME not in pc.list_indexes().names():
 
 index = pc.Index(INDEX_NAME)
 
-# Connect to Neo4j
 driver = GraphDatabase.driver(
     config.NEO4J_URI, auth=(config.NEO4J_USER, config.NEO4J_PASSWORD)
 )
@@ -43,8 +41,12 @@ driver = GraphDatabase.driver(
 # Helper functions
 # -----------------------------
 def embed_text(text: str) -> List[float]:
-    resp = client.embeddings.create(model=EMBED_MODEL, input=[text])
-    return resp.data[0].embedding
+    
+    
+    resp = client.models.embed_content(model="gemini-embedding-001",
+    contents=[text]
+)
+    return resp.embeddings[0].values
 
 def pinecone_query(query_text: str, top_k=TOP_K):
     vec = embed_text(query_text)
@@ -138,4 +140,5 @@ def interactive_chat():
         print("\n=== End ===\n")
 
 if __name__ == "__main__":
+    #print(embed_text("Test embedding"))
     interactive_chat()

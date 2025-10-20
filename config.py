@@ -10,6 +10,6 @@ NEO4J_PASSWORD = os.environ.get("NEO4J_CLIENT_SECRET")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY") 
 
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
-PINECONE_ENV = "us-east1-gcp"   # example
+PINECONE_ENV = "us-east1-gcp"   
 PINECONE_INDEX_NAME = "vietnam-travel"
-PINECONE_VECTOR_DIM = 3072        # adjust to embedding model used (text-embedding-3-large ~ 3072? check your model); we assume 1536 for common OpenAI models — change if needed.
+PINECONE_VECTOR_DIM = 3072      
