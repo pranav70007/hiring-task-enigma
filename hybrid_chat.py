@@ -112,7 +112,6 @@ def build_prompt(user_query, pinecone_matches, graph_facts):
     return prompt
 
 def call_chat(prompt_messages):
-    """Call OpenAI ChatCompletion."""
     resp = client.models.generate_content(
     model="gemini-2.5-flash-lite",
     contents='Ask a question',
